@@ -16,7 +16,7 @@ class Douban:
             html = requests.get(self.url,params={'start': start_index},headers=self.header)
             soup = BeautifulSoup(html.text,'html.parser')
             text = soup.select('#content > div > div.article > ol > li > div > div.info > div.hd > a > span.other')
-            for i,name in emumerate(text,start=1):
+            for i,name in enumerate(text,start=start_index+1):
                 name = name.get_text()
                 names = name.split("/")
                 name = names[1].replace(" ","")
