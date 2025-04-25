@@ -17,7 +17,10 @@ class Douban:
             soup = BeautifulSoup(html.text,'html.parser')
             text = soup.select('#content > div > div.article > ol > li > div > div.info > div.hd > a > span.other')
             for name in text:
-                print(name.get_text())
+                name = name.get_text()
+                names = name.split("/")
+                name = names[1].replace(" ","")
+                print(name)
             
             
             
