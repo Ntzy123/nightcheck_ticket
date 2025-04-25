@@ -16,11 +16,11 @@ class Douban:
             html = requests.get(self.url,params={'start': start_index},headers=self.header)
             soup = BeautifulSoup(html.text,'html.parser')
             text = soup.select('#content > div > div.article > ol > li > div > div.info > div.hd > a > span.other')
-            for name in text:
+            for i,name in emumerate(text,start=1):
                 name = name.get_text()
                 names = name.split("/")
                 name = names[1].replace(" ","")
-                print(name)
+                print(f"{i}. {name}")
             
             
             
