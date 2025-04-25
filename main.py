@@ -5,13 +5,13 @@ class Douban:
     
     def __init__(self):
         self.url = 'https://movie.douban.com/top250'
-        startnum = []
+        start_num = []
         for i in range(0, 226, 25):
-            startnum.append(i)
+            start_num.append(i)
         self.header = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'}
         
     def get_top250(self):
-        for start_index in start_num:
+        for start_index in self.start_num:
             start_index = str(start_index)
             html = requests.get(self.url,params={'start': start_index},headers=self.header)
             soup = BeautifulSoup(html,'html.parser')
@@ -20,6 +20,6 @@ class Douban:
             
             
             
-if __name__ == __main__:
+if __name__ == "__main__":
     db = Douban()
     db.get_top250()
