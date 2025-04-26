@@ -1,35 +1,21 @@
-import requests
-from bs4 import BeautifulSoup
-
-class Douban:
-    
-    def __init__(self):
-        self.url = 'https://movie.douban.com/top250'
-        self.start_num = []
-        for i in range(0, 226, 25):
-            self.start_num.append(i)
-        self.header = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'}
-        
-    def get_top250(self):
-        for start_index in self.start_num:
-            start_index = str(start_index)
-            html = requests.get(self.url,params={'start': start_index},headers=self.header)
-            soup = BeautifulSoup(html.text,'html.parser')
-            text = soup.select('#content > div > div.article > ol > li > div > div.info > div.hd > a > span.other')
-            for i,name in enumerate(text,start=start_index+1):
-                name = name.get_text()
-                names = name.split("/")
-                name = names[1].replace(" ","")
-                print(f"{i}. {name}")
-            
-            
-            
+import requests,json
+          
 if __name__ == "__main__":
-    #db = Douban()
-    #db.get_top250()
-    URL = "https://heimdallr.onewo.com/remote-event-center-new/#/taskDispatch/taskList"
-    header = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'}
-    html = requests.get(URL,headers=header)
-    soup = BeautifulSoup(html.text,'html.parser')
-    print(soup.prettify())
-
+    # 数据
+    with open("config.json", "r", encoding="utf-8") as file:
+        config = json.load(file)
+        url = config["url"]
+        headers = config["headers"]
+        data = config["data"]
+    # 请求
+    res = requests.post(url,json=data,headers=headers)
+    data_dict = res.json()
+    
+    # 数据处理
+    title = str(data_dict['data']['records'][0]['workorderDescription'])
+    status = data_dict['data']['records'][0]['workorderStatusName']
+    name = data_dict['data']['records'][0]['acceptName']
+    feedback_time = data_dict['data']['records'][0]['feedBackTime']
+    delimiter = "---------------------------------------------------------"
+    # 格式化输出
+    print(f"{delimiter}\n\t{title}\n  状态：{status}\n  接单人：{name}\n  超时时间：{feedback_time}")
